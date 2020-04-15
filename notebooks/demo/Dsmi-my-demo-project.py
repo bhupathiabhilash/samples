@@ -7,7 +7,10 @@
 # MAGIC Given Sepal and Petal lengths and width predict the class of Iris flower
 # MAGIC 
 # MAGIC <img src="https://miro.medium.com/max/1400/1*7bnLKsChXq94QjtAiRn40w.png" alt="Image" border="0">
-# MAGIC 
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC 
 # MAGIC ## Dataset Source: 
 # MAGIC https://gist.github.com/netj/8836201
@@ -26,7 +29,7 @@
 
 # MAGIC %md
 # MAGIC 
-# MAGIC Install Packages
+# MAGIC Import Packages
 
 # COMMAND ----------
 
@@ -42,6 +45,21 @@ import uuid
 
 # MAGIC %md 
 # MAGIC 
+# MAGIC ### My default langaugae is Python, but I can run scala code too...
+# MAGIC and have support for these languages --> mark-up (%md) , shell-scripts (%sh) , R (%r) , SQL (%sql)
+
+# COMMAND ----------
+
+# MAGIC %scala 
+# MAGIC val x = 1
+# MAGIC val y = 2
+# MAGIC val res = x+y
+# MAGIC printf("Result is ---- "+ res)
+
+# COMMAND ----------
+
+# MAGIC %md 
+# MAGIC 
 # MAGIC ## Scenarios & Configs
 # MAGIC 
 # MAGIC  - List all configs in one box
@@ -52,11 +70,11 @@ import uuid
 # All configurations 
 
 # Scenario 1 - 
-test_size_ratio = 0.33
-max_depth_val = 2
-eta_val = 1                  #learning_rate
-num_round = 10
-raw_data_version = "2"
+# test_size_ratio = 0.33
+# max_depth_val = 2
+# eta_val = 1                  #learning_rate
+# num_round = 10
+# raw_data_version = "2"
 
 # Scenario 2 - 
 # test_size_ratio = 0.20
@@ -73,11 +91,11 @@ raw_data_version = "2"
 # raw_data_version = "2"
 
 # Scenario 4 - 
-# test_size_ratio = 0.40
-# max_depth_val = 2
-# eta_val = 1
-# num_round = 10
-# raw_data_version = "2"
+test_size_ratio = 0.40
+max_depth_val = 2
+eta_val = 1
+num_round = 10
+raw_data_version = "2"
 
 ## End of configurations
 
@@ -195,7 +213,7 @@ param['num_class'] = 6
 
 # MAGIC %md 
 # MAGIC 
-# MAGIC ## Train & Evaluate model in MLFlow Experiment context
+# MAGIC ## Train model in MLFlow Experiment context
 
 # COMMAND ----------
 
@@ -230,7 +248,7 @@ with mlflow.start_run() as run:
   # Store related artifacts in MLflow  
   mlflow.log_artifact("output.txt")
   # Log model
-  mlflow.sklearn.log_model(bst, "Xgboost model")
+  mlflow.sklearn.log_model(bst, "Xgboost-model")
   runID = run.info.run_uuid
   experimentID = run.info.experiment_id
   

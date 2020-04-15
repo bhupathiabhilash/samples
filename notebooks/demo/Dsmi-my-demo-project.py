@@ -96,8 +96,30 @@ def load_raw_data(table_name, version):
   prepared_query = raw_query.replace("<VERSION>",version).replace("<TABLE>",table_name)
   df = spark.sql(prepared_query)
   return df
-raw_input = load_raw_data("dsmi.iris_raw",raw_data_version).toPandas()
+raw_input_df = load_raw_data("dsmi.iris_raw",raw_data_version)
+raw_input = raw_input_df.toPandas()
 print(raw_input)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC ## Visualize raw data 
+
+# COMMAND ----------
+
+import seaborn as sns
+sns.set(style="white")
+
+df = sns.load_dataset("iris")
+g = sns.PairGrid(df, diag_sharey=False)
+g.map_lower(sns.kdeplot)
+g.map_diag(sns.kdeplot, lw=3)
+
+g.map_upper(sns.regplot)
+
+display(g.fig)
+
 
 # COMMAND ----------
 
@@ -215,3 +237,19 @@ with mlflow.start_run() as run:
   print("Inside MLflow Run with run_id {} and experiment_id {}".format(runID, experimentID))
   
   #mlflow.log_artifacts('s3://'+bukcet_name+'/'+out_base_path)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC ### MLfLow's Autolog API -
+# MAGIC No need of writing code for logging individual params and metrics. Ml Libs like Keras, Tensorflow's are integrated by MLflow tracking API through autolog()!!!
+# MAGIC 
+# MAGIC Example - 
+# MAGIC import mlflow.keras
+# MAGIC 
+# MAGIC mlflow.keras.autolog() # This is all you need!
+# MAGIC 
+# MAGIC It will AUTOMATICALLY log --> the layer count, optimizer name, learning rate and epsilon value as parameters; loss and accuracy at each step of the training and validation stages; the model summary, as a tag; and finally, the model checkpoint as an artifact.
+# MAGIC 
+# MAGIC More details --> https://databricks.com/blog/2019/08/19/mlflow-tensorflow-open-source-show.html
